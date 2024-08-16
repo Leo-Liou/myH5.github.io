@@ -56,7 +56,7 @@
 
         // 更新计时器显示的函数
         function updateTimer() {
-            secondsElapsed++;
+            secondsElapsed += 1;  // 计时器加1秒
             document.getElementById('timer').innerText = `计时器: ${secondsElapsed} 秒`;
         }
 
