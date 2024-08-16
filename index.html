@@ -73,12 +73,18 @@
             setTimeout(() => {
                 ball.style.display = 'none';
                 // 随机等待一段时间后再显示新的足球
-                setTimeout(moveSoccerBall, Math.random() * 3000 + 1000);
+                startTimer();
             }, 3000);
         }
 
+        function startTimer() {
+            // 生成随机等待时间，最大不超过5秒
+            const waitTime = Math.random() * 5000;
+            setTimeout(moveSoccerBall, waitTime);
+        }
+
         // 启动足球飞行
-        setTimeout(moveSoccerBall, Math.random() * 3000 + 1000);
+        startTimer();
     </script>
 </body>
 </html>
