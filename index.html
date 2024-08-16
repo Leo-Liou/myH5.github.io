@@ -19,6 +19,16 @@
             font-size: 18px;
             font-weight: bold;
         }
+        .timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
         .soccer-ball {
             position: absolute;
             width: 50px;
@@ -35,9 +45,23 @@
         <p>苦心人，天不负，卧薪尝胆，三千越甲可吞吴</p>
     </header>
 
+    <!-- 计时器显示区域 -->
+    <div class="timer" id="timer">计时器: 0 秒</div>
+
     <div class="soccer-ball" id="soccerBall"></div>
 
     <script>
+        let secondsElapsed = 0;
+
+        // 更新计时器显示的函数
+        function updateTimer() {
+            secondsElapsed++;
+            document.getElementById('timer').innerText = `计时器: ${secondsElapsed} 秒`;
+        }
+
+        // 每秒更新一次计时器
+        setInterval(updateTimer, 1000);
+
         function createRandomPosition() {
             // 随机生成足球的初始位置和目标位置
             const screenWidth = window.innerWidth;
@@ -53,38 +77,4 @@
 
         function moveSoccerBall() {
             const ball = document.getElementById('soccerBall');
-            const { startX, startY, endX, endY } = createRandomPosition();
-
-            // 设置足球初始位置
-            ball.style.left = `${startX}px`;
-            ball.style.top = `${startY}px`;
-            ball.style.display = 'block';
-
-            // 创建足球飞行动画
-            ball.animate([
-                { transform: `translate(${startX}px, ${startY}px)` },
-                { transform: `translate(${endX}px, ${endY}px)` }
-            ], {
-                duration: 3000,
-                easing: 'linear'
-            });
-
-            // 在飞行结束时隐藏足球
-            setTimeout(() => {
-                ball.style.display = 'none';
-                // 随机等待一段时间后再显示新的足球
-                startTimer();
-            }, 3000);
-        }
-
-        function startTimer() {
-            // 生成随机等待时间，最大不超过5秒
-            const waitTime = Math.random() * 5000;
-            setTimeout(moveSoccerBall, waitTime);
-        }
-
-        // 启动足球飞行
-        startTimer();
-    </script>
-</body>
-</html>
+            const { startX, startY, endX, end
