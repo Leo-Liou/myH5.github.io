@@ -48,6 +48,7 @@
     <!-- 计时器显示区域 -->
     <div class="timer" id="timer">计时器: 0 秒</div>
 
+    <!-- 足球显示区域 -->
     <div class="soccer-ball" id="soccerBall"></div>
 
     <script>
@@ -68,13 +69,49 @@
             const screenHeight = window.innerHeight;
 
             const startX = Math.random() * screenWidth;
-            const startY = screenHeight + 100; // 从屏幕底部外生成
+            const startY = screenHeight; // 从屏幕底部生成
             const endX = Math.random() * screenWidth;
-            const endY = -100; // 飞出屏幕上方
+            const endY = 0; // 飞到屏幕上方
 
             return { startX, startY, endX, endY };
         }
 
         function moveSoccerBall() {
             const ball = document.getElementById('soccerBall');
-            const { startX, startY, endX, end
+            const { startX, startY, endX, endY } = createRandomPosition();
+
+            // 设置足球初始位置
+            ball.style.left = `${startX}px`;
+            ball.style.top = `${startY}px`;
+            ball.style.display = 'block';
+
+            // 创建足球飞行动画
+            ball.animate([
+                { transform: `translate(${startX}px, ${startY}px)` },
+                { transform: `translate(${endX}px, ${endY}px)` }
+            ], {
+                duration: 3000,
+                easing: 'linear'
+            });
+
+            // 在飞行结束时隐藏足球
+            setTimeout(() => {
+                ball.style.display = 'none';
+                // 随机等待一段时间后再显示新的足球
+                startTimer();
+            }, 3000);
+        }
+
+        function startTimer() {
+            // 生成随机等待时间，最大不超过5秒
+            const waitTime = Math.random() * 5000;
+            setTimeout(moveSoccerBall, waitTime);
+        }
+
+        // 启动足球飞行
+        window.onload = function() {
+            startTimer();  // 启动足球飞行
+        };
+    </script>
+</body>
+</html>
