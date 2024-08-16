@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flying Soccer Ball</title>
+    <title>3D Flying Soccer Ball</title>
     <style>
         body {
             margin: 0;
@@ -31,8 +31,6 @@
         }
         .soccer-ball {
             position: absolute;
-            width: 50px;
-            height: 50px;
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d3/Soccerball.svg');
             background-size: cover;
             display: none; /* 初始时隐藏足球 */
@@ -64,42 +62,42 @@
         setInterval(updateTimer, 1000);
 
         function createRandomPosition() {
-            // 随机生成足球的初始位置和目标位置
+            // 随机生成足球的初始位置
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
 
             const startX = Math.random() * screenWidth;
-            const startY = screenHeight; // 从屏幕底部生成
-            const endX = Math.random() * screenWidth;
-            const endY = 0; // 飞到屏幕上方
+            const startY = Math.random() * screenHeight;
 
-            return { startX, startY, endX, endY };
+            return { startX, startY };
         }
 
         function moveSoccerBall() {
             const ball = document.getElementById('soccerBall');
-            const { startX, startY, endX, endY } = createRandomPosition();
+            const { startX, startY } = createRandomPosition();
 
-            // 设置足球初始位置
+            // 设置足球初始位置和大小（远处时较小）
             ball.style.left = `${startX}px`;
             ball.style.top = `${startY}px`;
+            ball.style.width = `30px`;  // 远处足球较小
+            ball.style.height = `30px`;
             ball.style.display = 'block';
 
-            // 创建足球飞行动画
-            ball.animate([
-                { transform: `translate(${startX}px, ${startY}px)` },
-                { transform: `translate(${endX}px, ${endY}px)` }
+            // 创建足球飞行的3D效果动画，逐渐变大
+            const animation = ball.animate([
+                { transform: `scale(0.3)`, opacity: 0.5 },  // 远处较小且半透明
+                { transform: `scale(1)`, opacity: 1 }  // 近处较大且完全不透明
             ], {
                 duration: 3000,
-                easing: 'linear'
+                easing: 'ease-out'
             });
 
             // 在飞行结束时隐藏足球
-            setTimeout(() => {
+            animation.onfinish = () => {
                 ball.style.display = 'none';
                 // 随机等待一段时间后再显示新的足球
                 startTimer();
-            }, 3000);
+            };
         }
 
         function startTimer() {
