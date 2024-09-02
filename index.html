@@ -62,19 +62,21 @@
         setInterval(updateTimer, 1000);
 
         function createRandomPosition() {
-            // 随机生成足球的初始位置
+            // 随机生成足球的初始和终点位置
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
 
             const startX = Math.random() * screenWidth;
             const startY = Math.random() * screenHeight;
+            const endX = Math.random() * screenWidth;
+            const endY = Math.random() * screenHeight;
 
-            return { startX, startY };
+            return { startX, startY, endX, endY };
         }
 
         function moveSoccerBall() {
             const ball = document.getElementById('soccerBall');
-            const { startX, startY } = createRandomPosition();
+            const { startX, startY, endX, endY } = createRandomPosition();
 
             // 设置足球初始位置和大小（远处时较小）
             ball.style.left = `${startX}px`;
@@ -83,13 +85,17 @@
             ball.style.height = `30px`;
             ball.style.display = 'block';
 
-            // 创建足球飞行的3D效果动画，逐渐变大
+            // 计算足球飞行的距离以模拟大小变化
+            const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            const maxScale = 1.5; // 最大放大倍数
+
+            // 创建足球飞行的动画，包括大小变化
             const animation = ball.animate([
-                { transform: `scale(0.3)`, opacity: 0.5 },  // 远处较小且半透明
-                { transform: `scale(1)`, opacity: 1 }  // 近处较大且完全不透明
+                { transform: `translate(0px, 0px) scale(0.3)`, opacity: 0.5 },  // 远处较小且半透明
+                { transform: `translate(${endX - startX}px, ${endY - startY}px) scale(${maxScale})`, opacity: 1 }  // 近处较大且完全不透明
             ], {
                 duration: 3000,
-                easing: 'ease-out'
+                easing: 'linear'
             });
 
             // 在飞行结束时隐藏足球
