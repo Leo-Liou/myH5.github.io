@@ -62,10 +62,11 @@
         setInterval(updateTimer, 1000);
 
         function createRandomPosition() {
-            // 随机生成足球的初始和终点位置
+            // 获取屏幕的宽高
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
 
+            // 随机生成足球的初始位置和结束位置
             const startX = Math.random() * screenWidth;
             const startY = Math.random() * screenHeight;
             const endX = Math.random() * screenWidth;
@@ -81,20 +82,28 @@
             // 设置足球初始位置和大小（远处时较小）
             ball.style.left = `${startX}px`;
             ball.style.top = `${startY}px`;
-            ball.style.width = `30px`;  // 远处足球较小
+            ball.style.width = `30px`;  // 初始时的足球大小
             ball.style.height = `30px`;
             ball.style.display = 'block';
 
-            // 计算足球飞行的距离以模拟大小变化
-            const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-            const maxScale = 1.5; // 最大放大倍数
+            // 计算足球的运动距离
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            // 设置足球的最大和最小大小
+            const initialScale = 0.3; // 初始的缩放比例
+            const maxScale = 1.5; // 最大缩放比例
+            const scaleIncrease = maxScale - initialScale;
+
+            // 计算足球飞行的时间，根据屏幕大小动态设置
+            const flightDuration = 3000; // 飞行持续时间3秒
 
             // 创建足球飞行的动画，包括大小变化
             const animation = ball.animate([
-                { transform: `translate(0px, 0px) scale(0.3)`, opacity: 0.5 },  // 远处较小且半透明
-                { transform: `translate(${endX - startX}px, ${endY - startY}px) scale(${maxScale})`, opacity: 1 }  // 近处较大且完全不透明
+                { transform: `translate(0px, 0px) scale(${initialScale})`, opacity: 0.5 },  // 远处较小且半透明
+                { transform: `translate(${deltaX}px, ${deltaY}px) scale(${maxScale})`, opacity: 1 }  // 近处较大且完全不透明
             ], {
-                duration: 3000,
+                duration: flightDuration,
                 easing: 'linear'
             });
 
